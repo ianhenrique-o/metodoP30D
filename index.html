@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piloto 30 Dias | Implementação de Sistema</title>
+    <meta name="description" content="Transforme seu Instagram em um mecanismo previsível de pedidos certos.">
+    
+    <style>
+        /* RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #ffffff;
+            color: #111111;
+            line-height: 1.6;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* LAYOUT CONTAINER */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 80px 24px 120px 24px;
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 48px;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        p {
+            margin-bottom: 24px;
+            color: #333;
+        }
+
+        ul {
+            margin-bottom: 24px;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #999;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #000;
+        }
+
+        /* SPECIAL ELEMENTS */
+        .highlight-box {
+            background-color: #f9f9f9;
+            border: 1px solid #eaeaea;
+            padding: 32px;
+            border-radius: 8px;
+            margin: 40px 0;
+        }
+
+        .highlight-box h2 {
+            margin-top: 0;
+        }
+
+        /* CORREÇÃO DO BUG DA LISTA NUMERADA */
+        .highlight-box ol {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .highlight-box ol li::before {
+            content: none;
+        }
+
+        .mono {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.9em;
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #444;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #eaeaea;
+            margin: 64px 0;
+        }
+
+        /* CTA BUTTON */
+        .cta-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        .footnote {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 16px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px 80px 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HERO SECTION -->
+        <p class="mono">Engenharia de Posicionamento</p>
+        <h1>Seu Instagram não está ruim.<br>Ele só está operando sem sistema.</h1>
+        
+        <p>E quando não existe sistema, o custo aparece todo dia:</p>
+        
+        <ul>
+            <li>Atrai gente errada;</li>
+            <li>Vira atendimento gratuito;</li>
+            <li>Gera conversa sem conversão;</li>
+            <li>O cliente bom escolhe quem parece mais estruturado (não quem posta mais).</li>
+        </ul>
+
+        <p>Se você já é competente no que faz, o problema não é conteúdo. É falta de <strong>engenharia de posicionamento + conversão.</strong></p>
+
+        <p>Isso aqui não é sobre postar melhor. É sobre transformar seu Instagram em um mecanismo previsível de pedidos certos no direct.</p>
+
+        <p>Sem depender de trends.<br>
+        Sem viver apagando incêndio em DM.<br>
+        Sem produzir conteúdo "bonito" que não move ninguém.</p>
+
+        <hr>
+
+        <!-- THE OFFER -->
+        <div class="highlight-box">
+            <h2>Piloto 30 dias: Instagram que vende sem parecer amador</h2>
+            <p>Em 30 dias, duas coisas acontecem:</p>
+            <ol style="margin-bottom: 24px;">
+                <li style="padding-left: 0;"><strong>1.</strong> Seu perfil passa a comunicar valor imediatamente (mesmo para quem chega pela primeira vez).</li>
+                <li style="padding-left: 0;"><strong>2.</strong> Você passa a operar com um sistema simples que conduz o público certo até o pedido — sem improviso.</li>
+            </ol>
+            <p style="font-size: 0.9em; color: #666;">
+                <em>Não é curso. Não é consultoria solta. É implementação assistida.</em>
+            </p>
+        </div>
+
+        <h3>O que muda na prática</h3>
+        <ul>
+            <li>Mais DMs qualificadas por semana;</li>
+            <li>Menos conversa inútil;</li>
+            <li>Mais controle sobre quem avança e quem para;</li>
+            <li>Mais previsibilidade entre <span class="mono">post → DM → agendamento</span>.</li>
+        </ul>
+
+        <p><strong>Importante:</strong> isso não é promessa de faturamento. É eliminação de ruído. Quando o ruído sai, o bom cliente aparece.</p>
+
+        <hr>
+
+        <!-- DIAGNOSIS -->
+        <h2>Por que hoje não vira agenda?</h2>
+        <p>O gargalo quase nunca é esforço. É estrutura. Normalmente falta pelo menos uma dessas três peças:</p>
+
+        <h3>1. Perfil que sinaliza valor</h3>
+        <p>Bio, destaques e promessa não deixam claro pra quem é, o que resolve e por que você é a escolha lógica. Quando isso não está explícito, o público bom não avança.</p>
+
+        <h3>2. Conteúdo sem função clara</h3>
+        <p>Educa, mas não conduz. Entretem, mas não filtra. Resultado: engajamento sem intenção.</p>
+
+        <h3>3. Direct sem método</h3>
+        <p>DM não é conversa, é triagem + condução. Sem playbook, você vira suporte gratuito com esperança de conversão.</p>
+
+        <hr>
+
+        <!-- DELIVERABLES -->
+        <h2>O que será instalado em 30 dias</h2>
+        <p>Tudo aqui é pensado para funcionar sem dependência de mim depois.</p>
+
+        <ul>
+            <li><strong>Reposicionamento estratégico:</strong> Promessa clara em 1 frase e ângulos de diferenciação.</li>
+            <li><strong>Perfil de conversão:</strong> Bio reescrita com CTA objetivo e destaques com lógica de progressão.</li>
+            <li><strong>Sistema de Conteúdo:</strong> 12 roteiros de Reels + 4 carrosséis com intenção de venda.</li>
+            <li><strong>Playbook de Direct:</strong> Perguntas de triagem, respostas por cenário e regras de follow-up.</li>
+            <li><strong>Dashboard de controle:</strong> Para medir o que importa (baseline e checkpoints semanais).</li>
+        </ul>
+
+        <hr>
+
+        <!-- FILTERS -->
+        <div>
+            <div style="margin-bottom: 40px;">
+                <h3>Para quem funciona</h3>
+                <ul>
+                    <li>Já fatura acima de R$15k/mês</li>
+                    <li>Tem estrutura para atender mais demanda</li>
+                    <li>Consegue executar por 30 dias</li>
+                    <li>Quer parar de "postar e torcer"</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Não faz sentido se</h3>
+                <ul>
+                    <li>Quer terceirizar tudo sem executar</li>
+                    <li>Espera urgência fora de regra</li>
+                    <li>Gosta de acumular ideias e não aplicar</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- LOGISTICS & PRICE -->
+        <h2>Regras e Investimento</h2>
+        
+        <p>Sistema precisa de ordem. O atendimento acontece via WhatsApp, de Seg–Sex (10h–19h), com resposta em até 4h úteis. Sem caos operacional.</p>
+
+        <div class="highlight-box" style="text-align: center; border: 2px solid #000;">
+            <h3>Investimento — Vaga Piloto</h3>
+            <div style="font-size: 2.5rem; font-weight: 700; margin: 16px 0;">R$ 4.000</div>
+            <p style="margin-bottom: 8px;">Execução por 30 dias</p>
+            <p style="font-size: 0.9rem; color: #666;">Pagamento à vista ou 2x (Entrada + 15 dias)</p>
+        </div>
+
+        <div class="cta-container">
+            <p style="margin-bottom: 24px;">Três caminhos possíveis</p>
+            <ul style="text-align: left; margin-bottom: 40px;">
+                <li>Continuar postando sem sistema → curiosos → agenda instável</li>
+                <li>Tentar ajustar sozinho → meses testando → mesmo gargalo</li>
+                <li><strong>Instalar o sistema em 30 dias → pedidos mais certos → mais previsibilidade</strong></li>
+            </ul>
+            
+            <!-- Substitua SEU_USER_AQUI pelo seu @ do Instagram -->
+            <a href="https://ig.me/m/SEU_USER_AQUI" class="btn" target="_blank">
+                Chamar no Direct: "Implementação"
+            </a>
+            
+            <p class="footnote">Ao clicar, você será redirecionado para o Instagram.</p>
+        </div>
+
+        <div style="margin-top: 80px; padding-top: 40px; border-top: 1px solid #eaeaea; font-size: 0.8rem; color: #999; text-align: center;">
+            &copy; 2024 Engenharia de Posicionamento. Todos os direitos reservados.
+        </div>
+
+    </div>
+
+</body>
+</html>
