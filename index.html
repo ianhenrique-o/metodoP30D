@@ -3,305 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piloto 30 Dias | Implementação de Sistema</title>
-    <meta name="description" content="Transforme seu Instagram em um mecanismo previsível de pedidos certos.">
+    <title>Ian Henrique | Growth Partner</title>
     
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel para compilar JSX no navegador -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Fontes e Estilos Globais -->
     <style>
-        /* RESET & BASE */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            background-color: #ffffff;
-            color: #111111;
-            line-height: 1.6;
-            font-size: 18px;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #d1d5db;
         }
 
-        /* LAYOUT CONTAINER */
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 80px 24px 120px 24px;
+        /* Animações Customizadas */
+        @keyframes scanline {
+            0% { left: -100%; opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { left: 200%; opacity: 0; }
         }
-
-        /* TYPOGRAPHY */
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            line-height: 1.2;
-            margin-bottom: 24px;
+        
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
         }
-
-        h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-top: 48px;
-            margin-bottom: 16px;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 32px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        p {
-            margin-bottom: 24px;
-            color: #333;
-        }
-
-        ul {
-            margin-bottom: 24px;
-            list-style: none;
-            padding-left: 0;
-        }
-
-        li {
-            margin-bottom: 12px;
-            padding-left: 24px;
-            position: relative;
-        }
-
-        li::before {
-            content: "→";
+        
+        .scan-beam {
             position: absolute;
-            left: 0;
-            color: #999;
+            top: 0;
+            bottom: 0;
+            width: 150px;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.1), transparent);
+            filter: blur(20px);
+            animation: scanline 8s linear infinite;
+            transform: skewX(-20deg);
+            pointer-events: none;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
 
-        strong {
-            font-weight: 600;
-            color: #000;
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* SPECIAL ELEMENTS */
-        .highlight-box {
-            background-color: #f9f9f9;
-            border: 1px solid #eaeaea;
-            padding: 32px;
-            border-radius: 8px;
-            margin: 40px 0;
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
         }
-
-        .highlight-box h2 {
-            margin-top: 0;
-        }
-
-        /* CORREÇÃO DO BUG DA LISTA NUMERADA */
-        .highlight-box ol {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .highlight-box ol li::before {
-            content: none;
-        }
-
-        .mono {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            font-size: 0.9em;
-            background: #f4f4f4;
-            padding: 2px 6px;
+        ::-webkit-scrollbar-thumb {
+            background: #333;
             border-radius: 4px;
-            color: #444;
         }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: #eaeaea;
-            margin: 64px 0;
-        }
-
-        /* CTA BUTTON */
-        .cta-container {
-            margin-top: 40px;
-            text-align: center;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #000;
-            color: #fff;
-            text-decoration: none;
-            padding: 16px 32px;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            background-color: #333;
-            transform: translateY(-1px);
-        }
-
-        .footnote {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 16px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 20px 80px 20px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
         }
     </style>
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="container">
-        <!-- HERO SECTION -->
-        </p>
-        <h1>Seu Instagram não está ruim.<br>Ele só está operando sem sistema.</h1>
-        
-        <p>E quando não existe sistema, o custo aparece todo dia:</p>
-        
-        <ul>
-            <li>Atrai gente errada;</li>
-            <li>Vira atendimento gratuito;</li>
-            <li>Gera conversa sem conversão;</li>
-            <li>O cliente bom escolhe quem parece mais estruturado (não quem posta mais).</li>
-        </ul>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-        <p>Se você já é competente no que faz, o problema não é conteúdo. É falta de <strong>engenharia de posicionamento + conversão.</strong></p>
+        // --- Componentes de Ícones ---
+        const Icon = ({ path, className, size = 24 }) => (
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width={size} 
+                height={size} 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={className}
+            >
+                {path}
+            </svg>
+        );
 
-        <p>Isso aqui não é sobre postar melhor. É sobre transformar seu Instagram em um mecanismo previsível de pedidos certos no direct.</p>
+        const Icons = {
+            Check: (props) => <Icon {...props} path={<polyline points="20 6 9 17 4 12"></polyline>} />,
+            X: (props) => <Icon {...props} path={<><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></>} />,
+            ArrowRight: (props) => <Icon {...props} path={<><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></>} />,
+            ChevronDown: (props) => <Icon {...props} path={<polyline points="6 9 12 15 18 9"></polyline>} />,
+            Target: (props) => <Icon {...props} path={<><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></>} />,
+            PenTool: (props) => <Icon {...props} path={<><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></>} />,
+            MessageSquare: (props) => <Icon {...props} path={<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>} />,
+            RefreshCw: (props) => <Icon {...props} path={<><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></>} />,
+            AlertTriangle: (props) => <Icon {...props} path={<><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></>} />,
+            Users: (props) => <Icon {...props} path={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></>} />,
+            TrendingUp: (props) => <Icon {...props} path={<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>} />, 
+        };
 
-        <p>Sem depender de trends.<br>
-        Sem viver apagando incêndio em DM.<br>
-        Sem produzir conteúdo "bonito" que não move ninguém.</p>
+        // --- Utilitários ---
+        const RevealOnScroll = ({ children, delay = 0, className = "" }) => {
+            const [isVisible, setIsVisible] = useState(false);
+            const ref = useRef(null);
 
-        <hr>
+            useEffect(() => {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            setIsVisible(true);
+                            observer.unobserve(entry.target);
+                        }
+                    },
+                    { threshold: 0.1 }
+                );
+                if (ref.current) observer.observe(ref.current);
+                return () => {
+                    if (ref.current) observer.unobserve(ref.current);
+                };
+            }, []);
 
-        <!-- THE OFFER -->
-        <div class="highlight-box">
-            <h2>Piloto 30 dias: Instagram que vende sem parecer amador</h2>
-            <p>Em 30 dias, duas coisas acontecem:</p>
-            <ol style="margin-bottom: 24px;">
-                <li style="padding-left: 0;"><strong>1.</strong> Seu perfil passa a comunicar valor imediatamente (mesmo para quem chega pela primeira vez).</li>
-                <li style="padding-left: 0;"><strong>2.</strong> Você passa a operar com um sistema simples que conduz o público certo até o pedido — sem improviso.</li>
-            </ol>
-            <p style="font-size: 0.9em; color: #666;">
-                <em>Não é curso. Não é consultoria solta. É implementação assistida.</em>
-            </p>
-        </div>
+            return (
+                <div
+                    ref={ref}
+                    className={className}
+                    style={{
+                        opacity: isVisible ? 1 : 0,
+                        transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+                        transition: `all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1) \${delay}s`
+                    }}
+                >
+                    {children}
+                </div>
+            );
+        };
 
-        <h3>O que muda na prática</h3>
-        <ul>
-            <li>Mais DMs qualificadas por semana;</li>
-            <li>Menos conversa inútil;</li>
-            <li>Mais controle sobre quem avança e quem para;</li>
-            <li>Mais previsibilidade entre <span class="mono">post → DM → agendamento</span>.</li>
-        </ul>
+        const Button = ({ children, primary = true, className = "", ...props }) => (
+            <button
+                className={`
+                    px-8 py-4 rounded-lg font-bold text-lg tracking-wide transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg
+                    \${primary 
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] border border-blue-500/50' 
+                        : 'bg-transparent border border-white/20 text-white hover:bg-white/10'}
+                    \${className}
+                `}
+                {...props}
+            >
+                {children}
+            </button>
+        );
 
-        <p><strong>Importante:</strong> isso não é promessa de faturamento. É eliminação de ruído. Quando o ruído sai, o bom cliente aparece.</p>
-
-        <hr>
-
-        <!-- DIAGNOSIS -->
-        <h2>Por que hoje não vira agenda?</h2>
-        <p>O gargalo quase nunca é esforço. É estrutura. Normalmente falta pelo menos uma dessas três peças:</p>
-
-        <h3>1. Perfil que sinaliza valor</h3>
-        <p>Bio, destaques e promessa não deixam claro pra quem é, o que resolve e por que você é a escolha lógica. Quando isso não está explícito, o público bom não avança.</p>
-
-        <h3>2. Conteúdo sem função clara</h3>
-        <p>Educa, mas não conduz. Entretem, mas não filtra. Resultado: engajamento sem intenção.</p>
-
-        <h3>3. Direct sem método</h3>
-        <p>DM não é conversa, é triagem + condução. Sem playbook, você vira suporte gratuito com esperança de conversão.</p>
-
-        <hr>
-
-        <!-- DELIVERABLES -->
-        <h2>O que será instalado em 30 dias</h2>
-        <p>Tudo aqui é pensado para funcionar sem dependência de mim depois.</p>
-
-        <ul>
-            <li><strong>Reposicionamento estratégico:</strong> Promessa clara em 1 frase e ângulos de diferenciação.</li>
-            <li><strong>Perfil de conversão:</strong> Bio reescrita com CTA objetivo e destaques com lógica de progressão.</li>
-            <li><strong>Sistema de Conteúdo:</strong> 12 roteiros de Reels + 4 carrosséis com intenção de venda.</li>
-            <li><strong>Playbook de Direct:</strong> Perguntas de triagem, respostas por cenário e regras de follow-up.</li>
-            <li><strong>Dashboard de controle:</strong> Para medir o que importa (baseline e checkpoints semanais).</li>
-        </ul>
-
-        <hr>
-
-        <!-- FILTERS -->
-        <div>
-            <div style="margin-bottom: 40px;">
-                <h3>Para quem funciona</h3>
-                <ul>
-                    <li>Já fatura acima de R$15k/mês</li>
-                    <li>Tem estrutura para atender mais demanda</li>
-                    <li>Consegue executar por 30 dias</li>
-                    <li>Quer parar de "postar e torcer"</li>
-                </ul>
+        const GlassCard = ({ children, className = "" }) => (
+            <div className={`relative overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-colors duration-300 \${className}`}>
+                {children}
             </div>
-            <div>
-                <h3>Não faz sentido se</h3>
-                <ul>
-                    <li>Quer terceirizar tudo sem executar</li>
-                    <li>Espera urgência fora de regra</li>
-                    <li>Gosta de acumular ideias e não aplicar</li>
-                </ul>
-            </div>
-        </div>
+        );
 
-        <hr>
+        // --- Componente Principal ---
+        function App() {
+            const [scrolled, setScrolled] = useState(false);
 
-        <!-- LOGISTICS & PRICE -->
-        <h2>Regras e Investimento</h2>
-        
-        <p>Sistema precisa de ordem. O atendimento acontece via WhatsApp, de Seg–Sex (10h–19h), com resposta em até 4h úteis. Sem caos operacional.</p>
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
 
-        <div class="highlight-box" style="text-align: center; border: 2px solid #000;">
-            <h3>Investimento — Vaga Piloto</h3>
-            <div style="font-size: 2.5rem; font-weight: 700; margin: 16px 0;">R$ 4.000</div>
-            <p style="margin-bottom: 8px;">Execução por 30 dias</p>
-            <p style="font-size: 0.9rem; color: #666;">Pagamento à vista ou 2x (Entrada + 15 dias)</p>
-        </div>
+            const handleApplyClick = () => {
+                window.location.href = "https://ianhenrique-o.github.io/diagnostico-autoridade/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnE3FMYysF65P4jaOQ5IHw7LriOmbr-w_lf320LIwTXIuYVIQex3ZM9Tqnt5I_aem_lqAV_NMrQrzuAcOweEeM2A";
+            };
 
-        <div class="cta-container">
-            <p style="margin-bottom: 24px;">Três caminhos possíveis</p>
-            <ul style="text-align: left; margin-bottom: 40px;">
-                <li>Continuar postando sem sistema → curiosos → agenda instável</li>
-                <li>Tentar ajustar sozinho → meses testando → mesmo gargalo</li>
-                <li><strong>Instalar o sistema em 30 dias → pedidos mais certos → mais previsibilidade</strong></li>
-            </ul>
-            
-            <!-- Substitua SEU_USER_AQUI pelo seu @ do Instagram -->
-            <a href="https://www.instagram.com/o.ianhenrique/" class="btn" target="_blank">
-                Chamar no Direct: "Implementação"
-            </a>
-            
-            <p class="footnote">Ao clicar, você será redirecionado para o Instagram.</p>
-        </div>
+            return (
+                <div className="bg-[#050505] min-h-screen text-gray-300 overflow-x-hidden selection:bg-blue-500/30 selection:text-white">
+                    
+                    {/* Navbar */}
+                    <nav className={`fixed w-full z-50 transition-all duration-300 \${scrolled ? 'bg-[#050505]/90 backdrop-blur-md border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
+                        <div className="container mx-auto px-6 md:px-12 max-w-7xl flex justify-between items-center">
+                            <div className="text-xl font-bold text-white tracking-tighter uppercase border-l-2 border-blue-500 pl-3">
+                                Ian Henrique
+                            </div>
+                        </div>
+                    </nav>
 
-        <div style="margin-top: 80px; padding-top: 40px; border-top: 1px solid #eaeaea; font-size: 0.8rem; color: #999; text-align: center;">
-            &copy; 2026 Engenharia de Posicionamento. Todos os direitos reservados.
-        </div>
+                    {/* Hero Section */}
+                    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+                        <div className="absolute inset-0 bg-grid z-0"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/80 to-[#050505] z-0"></div>
+                        <div className="scan-beam z-0"></div>
 
-    </div>
+                        <div className="container mx-auto px-6 relative z-10">
+                            <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+                                <RevealOnScroll>
+                                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-6">
+                                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                        P30D
+                                    </div>
+                                </RevealOnScroll>
+                                
+                                <RevealOnScroll delay={0.1}>
+                                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight glow-text max-w-4xl mx-auto">
+                                        Plano 30 Dias
+                                    </h1>
+                                </RevealOnScroll>
 
+                                <RevealOnScroll delay={0.2}>
+                                    <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                                        Instalação estratégica do seu Instagram para virar uma máquina de autoridade e pedidos qualificados.
+                                    </p>
+                                </RevealOnScroll>
+
+                                <RevealOnScroll delay={0.3}>
+                                    <Button onClick={handleApplyClick} className="flex items-center justify-center gap-2">
+                                        Quero implementar o Plano 30 Dias <Icons.ArrowRight size={20} />
+                                    </Button>
+                                </RevealOnScroll>
+                            </div>
+                        </div>
+                        
+                        {/* Seta maior e animada */}
+                        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-500">
+                            <Icons.ChevronDown size={48} className="opacity-80" />
+                        </div>
+                    </section>
+
+                    {/* O Problema - Centralizado */}
+                    <section className="py-24 relative bg-[#0a0a0a]">
+                        <div className="container mx-auto px-6 md:px-20 max-w-4xl">
+                            <RevealOnScroll>
+                                <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center leading-tight">
+                                    Você não tem um problema de "conteúdo". <br/>
+                                    <span className="text-blue-500">Você tem um problema de estrutura.</span>
+                                </h2>
+                                
+                                <div className="space-y-6 text-lg text-gray-400 leading-relaxed text-center">
+                                    <p>
+                                        Se o seu Instagram não deixa óbvio, em segundos: <strong>o que você faz, pra quem você faz, por que você é a escolha certa e como começar...</strong> o cliente bom entra, olha e vai embora.
+                                    </p>
+                                    <p>
+                                        Sem te avisar. Sem te dar chance. E aí você fica tentando compensar com mais post. Mais esforço. Mais dica. Mais "constância".
+                                    </p>
+                                    <p>
+                                        Só que constância sem direção só aumenta o volume de gente errada. E mantém o seu Instagram no mesmo lugar: <span className="text-gray-300 italic">presença digital</span>.
+                                    </p>
+                                    <p className="text-white font-semibold text-xl pt-4">
+                                        O Plano 30 Dias existe para mudar isso rápido.<br/>
+                                        <span className="text-blue-400">Não com teoria. Com implementação guiada.</span>
+                                    </p>
+                                </div>
+                            </RevealOnScroll>
+                        </div>
+                    </section>
+
+                    {/* O que é vs O que não é */}
+                    <section className="py-20 relative bg-[#050505]">
+                        <div className="container mx-auto px-6 md:px-20 max-w-6xl">
+                            <div className="grid md:grid-cols-2 gap-8 items-stretch">
+                                {/* Não É */}
+                                <RevealOnScroll delay={0.1} className="h-full flex flex-col">
+                                    <div className="flex-1 bg-[#0a0a0a] border border-red-900/30 rounded-2xl p-8 hover:border-red-900/50 transition-colors duration-300">
+                                        <div className="inline-block px-3 py-1 bg-red-500/10 text-red-500 font-bold text-xs uppercase tracking-widest rounded mb-6">
+                                            O que NÃO é
+                                        </div>
+                                        <ul className="space-y-6">
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-red-500/10 p-1.5 rounded text-red-500 shrink-0"><Icons.X size={18} /></div>
+                                                <span className="text-gray-400">Alguém "cuidando do seu Instagram"</span>
+                                            </li>
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-red-500/10 p-1.5 rounded text-red-500 shrink-0"><Icons.X size={18} /></div>
+                                                <span className="text-gray-400">Agência postando por você</span>
+                                            </li>
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-red-500/10 p-1.5 rounded text-red-500 shrink-0"><Icons.X size={18} /></div>
+                                                <span className="text-gray-400">Pacote genérico com templates e "ideias"</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </RevealOnScroll>
+
+                                {/* É */}
+                                <RevealOnScroll delay={0.2} className="h-full flex flex-col">
+                                    <div className="flex-1 bg-[#0a0a0a] border border-blue-900/30 rounded-2xl p-8 hover:border-blue-500/50 transition-colors duration-300">
+                                        <div className="inline-block px-3 py-1 bg-blue-500/10 text-blue-400 font-bold text-xs uppercase tracking-widest rounded mb-6">
+                                            O que É
+                                        </div>
+                                        <ul className="space-y-6">
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-blue-500/20 p-1.5 rounded text-blue-400 shrink-0"><Icons.Check size={18} /></div>
+                                                <span className="text-gray-300"><strong className="text-white">Um sistema desenhado</strong> pro seu perfil, seu ticket, seu público e suas objeções.</span>
+                                            </li>
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-blue-500/20 p-1.5 rounded text-blue-400 shrink-0"><Icons.Check size={18} /></div>
+                                                <span className="text-gray-300"><strong className="text-white">Instalado com ordem</strong>, acompanhamento e ajustes.</span>
+                                            </li>
+                                            <li className="flex items-start gap-4">
+                                                <div className="mt-1 bg-blue-500/20 p-1.5 rounded text-blue-400 shrink-0"><Icons.Check size={18} /></div>
+                                                <span className="text-gray-300">Para seu Instagram parar de depender de sorte e <strong className="text-white">começar a conduzir decisão</strong>.</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </RevealOnScroll>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Método Passo a Passo (Timeline) */}
+                    <section className="py-24 relative">
+                        <div className="container mx-auto px-6 md:px-20 max-w-4xl">
+                            <RevealOnScroll>
+                                <div className="text-center mb-16">
+                                    <h2 className="text-4xl font-bold text-white mb-4">Método passo a passo</h2>
+                                    <p className="text-blue-500 font-mono tracking-widest">CRONOGRAMA DE 30 DIAS</p>
+                                </div>
+                            </RevealOnScroll>
+
+                            <div className="relative border-l border-white/10 ml-4 md:ml-8 space-y-12 pb-4">
+                                {/* Semana 1 */}
+                                <RevealOnScroll delay={0.1}>
+                                    <div className="relative pl-8 md:pl-12 group cursor-default">
+                                        <div className="absolute -left-5 md:-left-5 bg-[#050505] p-2 transition-transform duration-300 group-hover:scale-125">
+                                            <div className="w-6 h-6 rounded-full bg-blue-500 border-4 border-[#050505] shadow-[0_0_10px_rgba(59,130,246,0)] group-hover:shadow-[0_0_15px_rgba(59,130,246,0.6)] transition-shadow duration-300"></div>
+                                        </div>
+                                        <div className="transform transition-transform duration-300 group-hover:translate-x-2">
+                                            <h3 className="text-blue-400 font-bold text-sm tracking-widest mb-2 uppercase">Semana 1</h3>
+                                            <h4 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors duration-300">A base que decide tudo</h4>
+                                            <p className="text-gray-400 mb-3">
+                                                A gente trava a mensagem central do seu perfil: quem você atende, o que você resolve e qual é o caminho do cliente até a decisão.
+                                            </p>
+                                            <p className="text-gray-400">
+                                                Eu organizo o topo do seu perfil para que a pessoa entre e entenda rápido: <em>“isso é pra mim e eu sei como começar”</em>.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </RevealOnScroll>
+
+                                {/* Semana 2 */}
+                                <RevealOnScroll delay={0.2}>
+                                    <div className="relative pl-8 md:pl-12 group cursor-default">
+                                        <div className="absolute -left-5 md:-left-5 bg-[#050505] p-2 transition-transform duration-300 group-hover:scale-125">
+                                            <div className="w-6 h-6 rounded-full bg-white/20 border-4 border-[#050505] shadow-[0_0_10px_rgba(255,255,255,0)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-shadow duration-300"></div>
+                                        </div>
+                                        <div className="transform transition-transform duration-300 group-hover:translate-x-2">
+                                            <h3 className="text-gray-500 font-bold text-sm tracking-widest mb-2 uppercase">Semana 2</h3>
+                                            <h4 className="text-2xl font-bold text-white mb-3 group-hover:text-gray-200 transition-colors duration-300">Conteúdo com intenção</h4>
+                                            <p className="text-gray-400 mb-3">
+                                                Você para de inventar post. Eu construo sua linha editorial para atrair gente certa e construir autoridade de verdade.
+                                            </p>
+                                            <p className="text-gray-400">
+                                                Você passa a postar com função: o que atrai, o que prova, o que filtra e o que chama para ação.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </RevealOnScroll>
+
+                                {/* Semana 3 */}
+                                <RevealOnScroll delay={0.3}>
+                                    <div className="relative pl-8 md:pl-12 group cursor-default">
+                                        <div className="absolute -left-5 md:-left-5 bg-[#050505] p-2 transition-transform duration-300 group-hover:scale-125">
+                                            <div className="w-6 h-6 rounded-full bg-white/20 border-4 border-[#050505] shadow-[0_0_10px_rgba(255,255,255,0)] group-hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-shadow duration-300"></div>
+                                        </div>
+                                        <div className="transform transition-transform duration-300 group-hover:translate-x-2">
+                                            <h3 className="text-gray-500 font-bold text-sm tracking-widest mb-2 uppercase">Semana 3</h3>
+                                            <h4 className="text-2xl font-bold text-white mb-3 group-hover:text-gray-200 transition-colors duration-300">O que separa perfil que parece bom de perfil que vende</h4>
+                                            <p className="text-gray-400 mb-3">
+                                                A gente arruma o que mais faz você perder tempo: condução no direct.
+                                            </p>
+                                            <p className="text-gray-400">
+                                                Você não vai mais depender de “ser bom de conversa”. Você vai ter um jeito claro de conduzir.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </RevealOnScroll>
+
+                                {/* Semana 4 */}
+                                <RevealOnScroll delay={0.4}>
+                                    <div className="relative pl-8 md:pl-12 group cursor-default">
+                                        <div className="absolute -left-5 md:-left-5 bg-[#050505] p-2 transition-transform duration-300 group-hover:scale-125">
+                                            <div className="w-6 h-6 rounded-full bg-emerald-500 border-4 border-[#050505] shadow-[0_0_10px_rgba(16,185,129,0)] group-hover:shadow-[0_0_15px_rgba(16,185,129,0.6)] transition-shadow duration-300"></div>
+                                        </div>
+                                        <div className="transform transition-transform duration-300 group-hover:translate-x-2">
+                                            <h3 className="text-emerald-500 font-bold text-sm tracking-widest mb-2 uppercase">Semana 4</h3>
+                                            <h4 className="text-2xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors duration-300">Ajuste fino e consolidação</h4>
+                                            <p className="text-gray-400 mb-3">
+                                                A gente corrige o que estiver travando e reforça o que estiver funcionando.
+                                            </p>
+                                            <p className="text-gray-400">
+                                                Você termina com um sistema que dá para manter sem depender de mim.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </RevealOnScroll>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Entregáveis */}
+                    <section className="py-24 relative bg-[#0a0a0a]">
+                        <div className="container mx-auto px-6 md:px-20 max-w-6xl">
+                            <RevealOnScroll>
+                                <div className="mb-16 text-center">
+                                    <h2 className="text-4xl font-bold text-white mt-2">O que você recebe (de verdade)</h2>
+                                </div>
+                            </RevealOnScroll>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                                <RevealOnScroll delay={0.1} className="h-full flex flex-col">
+                                    <GlassCard className="flex-1 flex flex-col group hover:bg-white/10">
+                                        <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                                            <Icons.Target size={24} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-3">Arquitetura completa do seu perfil</h3>
+                                        <p className="text-gray-400 text-sm flex-grow">
+                                            Você não recebe “uma bio”. Você recebe um perfil montado para conduzir decisão: bio, destaques e fixados com sequência lógica e um caminho claro para a pessoa avançar.
+                                        </p>
+                                    </GlassCard>
+                                </RevealOnScroll>
+
+                                <RevealOnScroll delay={0.2} className="h-full flex flex-col">
+                                    <GlassCard className="flex-1 flex flex-col group hover:bg-white/10">
+                                        <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                                            <Icons.PenTool size={24} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-3">Direção editorial + roteiros prontos</h3>
+                                        <p className="text-gray-400 text-sm flex-grow">
+                                            Não é lista de temas. É direção pensada para o seu serviço, com roteiros prontos e ordem de execução para criar autoridade e gerar pedidos (30 dias).
+                                        </p>
+                                    </GlassCard>
+                                </RevealOnScroll>
+
+                                <RevealOnScroll delay={0.3} className="h-full flex flex-col">
+                                    <GlassCard className="flex-1 flex flex-col group hover:bg-white/10">
+                                        <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                                            <Icons.MessageSquare size={24} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-3">Direct organizado</h3>
+                                        <p className="text-gray-400 text-sm flex-grow">
+                                            Para não virar atendimento. Você recebe triagem simples, respostas por cenário e follow-up. Isso protege seu tempo e aumenta a chance de conversa virar decisão.
+                                        </p>
+                                    </GlassCard>
+                                </RevealOnScroll>
+
+                                <RevealOnScroll delay={0.4} className="h-full flex flex-col">
+                                    <GlassCard className="flex-1 flex flex-col group hover:bg-white/10">
+                                        <div className="w-12 h-12 bg-orange-500/10 rounded-lg flex items-center justify-center text-orange-400 mb-6 group-hover:scale-110 transition-transform">
+                                            <Icons.RefreshCw size={24} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-3">Acompanhamento e ajustes</h3>
+                                        <p className="text-gray-400 text-sm flex-grow">
+                                            Não é “entregar e sumir”. Você tem correção de rota durante o processo para não ficar preso em tentativa e erro.
+                                        </p>
+                                    </GlassCard>
+                                </RevealOnScroll>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Consequências e Público Alvo */}
+                    <section className="py-24 relative">
+                        <div className="container mx-auto px-6 md:px-20 max-w-5xl">
+                            <div className="flex flex-col gap-8">
+                                
+                                {/* Custo da Inação */}
+                                <RevealOnScroll delay={0.1}>
+                                    <div className="border border-red-900/30 bg-[#0f0505] rounded-2xl p-8 md:p-10 relative overflow-hidden">
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-red-600"></div>
+                                        <div className="flex items-center gap-3 mb-6">
+                                            <Icons.AlertTriangle className="text-red-500" size={28} />
+                                            <h3 className="text-2xl font-bold text-white">Se você não implementar, o que acontece</h3>
+                                        </div>
+                                        <p className="text-gray-300 mb-4 font-semibold">Você vai continuar:</p>
+                                        <ul className="space-y-3 mb-6 text-gray-400">
+                                            <li className="flex items-start gap-3"><span className="text-red-500 mt-1">✕</span> dependendo de indicação e sorte</li>
+                                            <li className="flex items-start gap-3"><span className="text-red-500 mt-1">✕</span> postando sem saber se aquilo aproxima alguém da decisão</li>
+                                            <li className="flex items-start gap-3"><span className="text-red-500 mt-1">✕</span> perdendo gente boa que entra, não entende e sai</li>
+                                            <li className="flex items-start gap-3"><span className="text-red-500 mt-1">✕</span> gastando energia com conversa que não vira cliente</li>
+                                        </ul>
+                                        <p className="text-white text-lg font-medium border-t border-red-900/30 pt-4 mt-2">
+                                            O custo não é só tempo. É o que deixa de entrar por mês sem você conseguir enxergar.
+                                        </p>
+                                    </div>
+                                </RevealOnScroll>
+
+                                {/* Para quem é */}
+                                <RevealOnScroll delay={0.2}>
+                                    <div className="flex flex-col gap-4 pt-4 md:pt-8">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <Icons.Users className="text-blue-400" size={28} />
+                                            <h3 className="text-2xl font-bold text-white">Para quem é</h3>
+                                        </div>
+                                        <p className="text-gray-300 text-lg leading-relaxed">
+                                            Profissionais liberais/autônomos com serviço sério, ticket em torno de 2k–5k, que querem vender sem virar influencer e estão dispostos a executar por 30 dias.
+                                        </p>
+                                        <p className="text-gray-500 text-sm mt-2">
+                                            <strong className="text-red-400">Não é para:</strong> quem quer alguém postando por você, quer atalhos sem execução ou quer viralizar em vez de converter.
+                                        </p>
+                                    </div>
+                                </RevealOnScroll>
+
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Investimento - Centralizado */}
+                    <section className="py-24 relative overflow-hidden">
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+                        <div className="container mx-auto px-6 relative z-10">
+                            <div className="max-w-3xl mx-auto">
+                                <RevealOnScroll>
+                                    <div className="relative bg-gradient-to-b from-[#151515] to-black border border-white/10 rounded-3xl p-1 md:p-2 overflow-hidden shadow-2xl shadow-blue-900/20">
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
+                                        
+                                        <div className="bg-[#0a0a0a] rounded-2xl p-8 md:p-12 text-center">
+                                            <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-mono mb-8 tracking-widest">
+                                                INVESTIMENTO (FASE INICIAL)
+                                            </div>
+                                            
+                                            <div className="flex flex-col justify-center items-center mb-6">
+                                                <div className="flex items-end gap-2">
+                                                    <span className="text-xl text-gray-500 mb-2 font-light">R$</span>
+                                                    <span className="text-6xl md:text-7xl font-bold text-white tracking-tighter">3.000</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <p className="text-gray-400 mb-10 text-sm max-w-md mx-auto leading-relaxed">
+                                                Valor de entrada para rodar volume, coletar feedback e consolidar provas. <br/><br/>
+                                                <span className="text-white font-semibold">Depois, o preço sobe e as regras ficam mais rígidas.</span>
+                                            </p>
+
+                                            <Button 
+                                                onClick={handleApplyClick}
+                                                className="w-full md:w-auto min-w-[300px] text-center justify-center py-5 text-xl"
+                                            >
+                                                Quero implementar o Plano 30 Dias
+                                            </Button>
+                                            
+                                            <p className="mt-6 text-xs text-gray-600">
+                                                Você faz um onboarding curto e a gente começa a semana 1.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </RevealOnScroll>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="py-8 bg-black text-center text-gray-600 text-sm border-t border-white/5">
+                        <div className="container mx-auto px-6">
+                            <p>&copy; {new Date().getFullYear()} Ian Henrique. Todos os direitos reservados.</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
