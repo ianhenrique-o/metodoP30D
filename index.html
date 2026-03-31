@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ian Henrique | Growth Partner</title>
+    <title>Ian Henrique | P30D</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -94,7 +94,7 @@
         const { useState, useEffect, useRef } = React;
 
         // --- Componentes de Ícones ---
-        const Icon = ({ path, className, size = 24 }) => (
+        const Icon = ({ path, className, size = 24, strokeWidth = "2" }) => (
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width={size} 
@@ -102,7 +102,7 @@
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
-                strokeWidth="2" 
+                strokeWidth={strokeWidth} 
                 strokeLinecap="round" 
                 strokeLinejoin="round" 
                 className={className}
@@ -187,8 +187,13 @@
             const [progress, setProgress] = useState(0);
 
             useEffect(() => {
-                const handleScroll = () => {
-                    if (!containerRef.current) return;
+                let ticking = false; // Controle para o requestAnimationFrame
+
+                const updateProgress = () => {
+                    if (!containerRef.current) {
+                        ticking = false;
+                        return;
+                    }
                     
                     const { top, height } = containerRef.current.getBoundingClientRect();
                     const windowHeight = window.innerHeight;
@@ -196,6 +201,7 @@
                     // Proteção: Se a seção ainda não chegou no topo da tela
                     if (top > 0) {
                         setProgress(0);
+                        ticking = false;
                         return;
                     }
                     
@@ -205,12 +211,23 @@
                     // Proteção: Se já passamos do final da seção
                     if (-top > scrollableDistance) {
                         setProgress(1);
+                        ticking = false;
                         return;
                     }
                     
                     // Calculando progresso de 0 a 1
                     let currentProgress = -top / scrollableDistance;
                     setProgress(currentProgress);
+                    
+                    ticking = false; // Libera para o próximo cálculo
+                };
+
+                const handleScroll = () => {
+                    // Só agenda um novo cálculo se o anterior já terminou (evita sobrecarga)
+                    if (!ticking) {
+                        window.requestAnimationFrame(updateProgress);
+                        ticking = true;
+                    }
                 };
 
                 window.addEventListener('scroll', handleScroll, { passive: true });
@@ -277,15 +294,19 @@
                     {/* Elemento Sticky que trava na tela */}
                     <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
                         
-                        {/* Background animado global (Glow Blob) */}
+                        {/* Background animado global (Glow Blob) com Aceleração de Hardware */}
                         <div 
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full blur-[100px] pointer-events-none transition-colors duration-1000 ease-in-out"
-                            style={{ backgroundColor: currentGlow }}
+                            style={{ 
+                                backgroundColor: currentGlow,
+                                willChange: 'background-color',
+                                transform: 'translate(-50%, -50%) translateZ(0)' // Força renderização na GPU
+                            }}
                         />
 
                         {/* Número Gigante de Fundo */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none z-0 overflow-hidden">
-                            <span className="text-[40vw] font-black tracking-tighter text-white transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] transform scale-110">
+                            <span className="text-[40vw] font-black tracking-tighter text-white transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] transform scale-110" style={{ willChange: 'contents' }}>
                                 0{activeIndex + 1}
                             </span>
                         </div>
@@ -311,7 +332,8 @@
                                         className="absolute top-1/2 md:top-0 left-0 md:left-[11px] w-full md:w-[2px] h-[2px] md:h-full origin-left md:origin-top transition-transform duration-100 ease-out z-10"
                                         style={{ 
                                             backgroundColor: '#fff', 
-                                            transform: `scale${window.innerWidth < 768 ? 'X' : 'Y'}(${progress})` 
+                                            transform: `scale${window.innerWidth < 768 ? 'X' : 'Y'}(${progress}) translateZ(0)`,
+                                            willChange: 'transform'
                                         }}
                                     />
 
@@ -367,6 +389,7 @@
                                         <div 
                                             key={idx}
                                             className={`absolute w-full p-8 md:p-12 rounded-3xl timeline-glass transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${transformClass} ${opacityClass}`}
+                                            style={{ willChange: 'transform, opacity, filter' }}
                                         >
                                             <div className="flex items-center gap-4 mb-6">
                                                 <div className={`w-12 h-1 rounded-full ${step.colorClass}`}></div>
@@ -407,6 +430,16 @@
             const handleApplyClick = () => {
                 window.location.href = "https://ianhenrique-o.github.io/diagnostico-autoridade/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnE3FMYysF65P4jaOQ5IHw7LriOmbr-w_lf320LIwTXIuYVIQex3ZM9Tqnt5I_aem_lqAV_NMrQrzuAcOweEeM2A";
             };
+
+            const deliverables = [
+                { title: "Diagnóstico do perfil", desc: "O que está travando a percepção de valor. Não é auditoria estética - é mapeamento de gargalo." },
+                { title: "Big idea e promessa central da marca", desc: "A mensagem-raiz que orienta tudo: bio, conteúdo, destaques, qualquer ponto de contato com o mercado." },
+                { title: "Bio, destaques e fixados", desc: "O trio que qualifica o lead antes de qualquer conversa. Quando funciona, o direct muda de qualidade." },
+                { title: "Direção de conteúdo com roteiros prontos", desc: "Não é lista de temas. São roteiros que posicionam, educam e empurram para decisão." },
+                { title: "Organização do direct", desc: "Triagem e follow-up. Estrutura para transformar conversa em cliente - sem improviso." },
+                { title: "Dashboard de acompanhamento", desc: "Dado vira decisão, não ansiedade." },
+                { title: "Agente de IA treinado para os conteúdos", desc: "Quando faz sentido: IA treinada para produzir no nível daquela marca específica." }
+            ];
 
             return (
                 <div className="bg-[#050505] min-h-screen text-gray-300 selection:bg-blue-500/30 selection:text-white" style={{ overflowX: 'clip' }}>
@@ -543,12 +576,12 @@
                     <CreativeTimeline />
                     {/* ---------------------------- */}
 
-                    {/* Entregáveis */}
+                    {/* Entregáveis Antigos (Pode remover depois se achar redundante, mas mantive para não quebrar seu layout original) */}
                     <section className="py-24 relative bg-[#0a0a0a]">
                         <div className="container mx-auto px-6 md:px-20 max-w-6xl">
                             <RevealOnScroll>
                                 <div className="mb-16 text-center">
-                                    <h2 className="text-4xl font-bold text-white mt-2">O que você recebe (de verdade)</h2>
+                                    <h2 className="text-4xl font-bold text-white mt-2">Os pilares da implementação</h2>
                                 </div>
                             </RevealOnScroll>
 
@@ -636,7 +669,7 @@
                                             <h3 className="text-2xl font-bold text-white">Para quem é</h3>
                                         </div>
                                         <p className="text-gray-300 text-lg leading-relaxed">
-                                            Profissionais liberais/autônomos com serviço sério, ticket em torno de 2k–5k, que querem vender sem virar influencer e estão dispostos a executar por 30 dias.
+                                            Profissionais liberais/autônomos com serviço sério, que querem vender sem virar influencer ou viver de trends e estão dispostos a executar por 30 dias.
                                         </p>
                                         <p className="text-gray-500 text-sm mt-2">
                                             <strong className="text-red-400">Não é para:</strong> quem quer alguém postando por você, quer atalhos sem execução ou quer viralizar em vez de converter.
@@ -648,43 +681,67 @@
                         </div>
                     </section>
 
-                    {/* Investimento */}
+                    {/* Investimento (NOVO LAYOUT PREMIUM DE DUAS COLUNAS) */}
                     <section className="py-24 relative overflow-hidden">
                         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none"></div>
 
                         <div className="container mx-auto px-6 relative z-10">
-                            <div className="max-w-3xl mx-auto">
+                            <div className="max-w-5xl mx-auto">
                                 <RevealOnScroll>
                                     <div className="relative bg-gradient-to-b from-[#151515] to-black border border-white/10 rounded-3xl p-1 md:p-2 overflow-hidden shadow-2xl shadow-blue-900/20">
                                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
                                         
-                                        <div className="bg-[#0a0a0a] rounded-2xl p-8 md:p-12 text-center">
-                                            <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-mono mb-8 tracking-widest">
-                                                INVESTIMENTO (FASE INICIAL)
-                                            </div>
+                                        <div className="bg-[#0a0a0a] rounded-2xl p-8 md:p-12 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center lg:items-start">
                                             
-                                            <div className="flex flex-col justify-center items-center mb-6">
-                                                <div className="flex items-end gap-2">
-                                                    <span className="text-xl text-gray-500 mb-2 font-light">R$</span>
-                                                    <span className="text-6xl md:text-7xl font-bold text-white tracking-tighter">3.000</span>
+                                            {/* Lado Esquerdo: Preço e CTA */}
+                                            <div className="lg:w-[40%] flex flex-col justify-center items-center lg:items-start text-center lg:text-left lg:sticky lg:top-32">
+                                                <div className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs font-mono mb-8 tracking-widest">
+                                                    INVESTIMENTO
                                                 </div>
+                                                
+                                                <div className="flex items-end gap-2 mb-6">
+                                                    <span className="text-xl text-gray-500 mb-2 font-light">R$</span>
+                                                    <span className="text-6xl md:text-7xl font-bold text-white tracking-tighter">2.500</span>
+                                                </div>
+                                                
+                                                <p className="text-gray-400 mb-10 text-sm leading-relaxed max-w-sm">
+                                                    Esse preço está com os dias contados. <br/><br/>
+                                                    <span className="text-white font-semibold">Daqui uns dias, ele vai subir, e as regras ficarão mais rígidas também.</span>
+                                                </p>
+
+                                                <Button 
+                                                    onClick={handleApplyClick}
+                                                    className="w-full text-center justify-center py-5 text-xl"
+                                                >
+                                                    Quero implementar
+                                                </Button>
+                                                
+                                                <p className="mt-6 text-xs text-gray-600">
+                                                    Se você quer parar de improvisar em seu instagram, toque no botão acima. Vamos começar a resolver o seu problema nos próximos 3 dias.
+                                                </p>
+                                            </div>
+
+                                            {/* Lado Direito: Entregáveis Detalhados */}
+                                            <div className="lg:w-[60%] w-full lg:pl-12 lg:border-l border-white/5">
+                                                <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                                                    O que eu vou te entregar:
+                                                </h3>
+                                                
+                                                <ul className="space-y-4">
+                                                    {deliverables.map((item, idx) => (
+                                                        <li key={idx} className="flex items-start gap-4 p-5 rounded-xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300 group">
+                                                            <div className="mt-1 w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 shrink-0 group-hover:bg-blue-500/20 group-hover:shadow-[0_0_12px_rgba(59,130,246,0.4)] group-hover:scale-110 transition-all duration-300">
+                                                                <Icons.Check size={14} strokeWidth="3" />
+                                                            </div>
+                                                            <div>
+                                                                <h4 className="text-white font-semibold text-base mb-1.5 group-hover:text-blue-200 transition-colors">{item.title}</h4>
+                                                                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                                                            </div>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                             
-                                            <p className="text-gray-400 mb-10 text-sm max-w-md mx-auto leading-relaxed">
-                                                Valor de entrada para rodar volume, coletar feedback e consolidar provas. <br/><br/><br/>
-                                                <span className="text-white font-semibold">Depois, o preço sobe e as regras ficam mais rígidas.</span>
-                                            </p>
-
-                                            <Button 
-                                                onClick={handleApplyClick}
-                                                className="w-full md:w-auto min-w-[300px] text-center justify-center py-5 text-xl"
-                                            >
-                                                Quero implementar o Plano 30 Dias
-                                            </Button>
-                                            
-                                            <p className="mt-6 text-xs text-gray-600">
-                                                Você faz um onboarding curto e a gente começa a semana 1.
-                                            </p>
                                         </div>
                                     </div>
                                 </RevealOnScroll>
@@ -695,7 +752,7 @@
                     {/* Footer */}
                     <footer className="py-8 bg-black text-center text-gray-600 text-sm border-t border-white/5">
                         <div className="container mx-auto px-6">
-                            <p>&copy; {new Date().getFullYear()} Ian Henrique. Todos os direitos reservados.</p>
+                            <p>&copy; {new Date().getFullYear()} Ian Henrique 2026. Todos os direitos reservados.</p>
                         </div>
                     </footer>
                 </div>
