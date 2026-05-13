@@ -285,8 +285,8 @@
             const currentGlow = steps[activeIndex].glowColor;
 
             return (
-                // Altura de 400vh permite bastante scroll para a animação acontecer devagar
-                <section ref={containerRef} className="relative w-full h-[400vh] bg-[#050505]">
+                // Altura reduzida de 400vh para 250vh para um scroll mais rápido e leve
+                <section ref={containerRef} className="relative w-full h-[250vh] bg-[#050505]">
                     {/* Elemento Sticky que trava na tela */}
                     <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
                         
@@ -359,33 +359,33 @@
                                 </div>
                             </div>
 
-                            {/* Direita: Content Cards animados */}
-                            <div className="w-full md:w-2/3 relative h-[50vh] md:h-[60vh] flex items-center perspective-[1000px]">
+                            {/* Direita: Content Cards animados (Sem perspective pesada) */}
+                            <div className="w-full md:w-2/3 relative h-[50vh] md:h-[60vh] flex items-center">
                                 {steps.map((step, idx) => {
                                     const isActive = activeIndex === idx;
                                     const isPast = activeIndex > idx;
                                     const isFuture = activeIndex < idx;
                                     
-                                    // Cálculos de classe para animação 3D e Opacidade
+                                    // Cálculos de classe para animação mais suave e leve
                                     let transformClass = "";
                                     let opacityClass = "opacity-0";
                                     
                                     if (isActive) {
-                                        transformClass = "translate-y-0 scale-100 rotateX-0 z-20";
+                                        transformClass = "translate-y-0 scale-100 z-20";
                                         opacityClass = "opacity-100";
                                     } else if (isPast) {
-                                        transformClass = "-translate-y-24 scale-95 opacity-0 z-10 blur-sm pointer-events-none";
+                                        transformClass = "-translate-y-8 scale-[0.98] opacity-0 z-10 pointer-events-none";
                                         opacityClass = "opacity-0";
                                     } else if (isFuture) {
-                                        transformClass = "translate-y-24 scale-95 opacity-0 z-10 blur-sm pointer-events-none";
+                                        transformClass = "translate-y-8 scale-[0.98] opacity-0 z-10 pointer-events-none";
                                         opacityClass = "opacity-0";
                                     }
 
                                     return (
                                         <div 
                                             key={idx}
-                                            className={`absolute w-full p-8 md:p-12 rounded-3xl timeline-glass transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${transformClass} ${opacityClass}`}
-                                            style={{ willChange: 'transform, opacity, filter' }}
+                                            className={`absolute w-full p-8 md:p-12 rounded-3xl timeline-glass transition-all duration-500 ease-out ${transformClass} ${opacityClass}`}
+                                            style={{ willChange: 'transform, opacity' }}
                                         >
                                             <div className="flex items-center gap-4 mb-6">
                                                 <div className={`w-12 h-1 rounded-full ${step.colorClass}`}></div>
